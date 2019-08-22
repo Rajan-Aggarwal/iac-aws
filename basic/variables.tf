@@ -1,3 +1,7 @@
+###
+# home of all variables
+###
+
 variable "region" {
   default = "ap-south-1"
   description = "The region/location of the data-center"
@@ -17,3 +21,13 @@ variable "instance_type" {
   default = "t2.micro" # free-tier 
   description = "The type of instance for the deployment"
 }
+
+variable "instances" {
+  default = [
+    "server0",
+    "server1",
+    "server2",
+  ]
+  description = "List of servers running"
+}
+
