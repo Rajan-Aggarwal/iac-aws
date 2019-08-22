@@ -9,3 +9,14 @@ resource "aws_instance" "simple_instance" {
     Env = "Practice"
   } 
 }
+
+# output on completion
+
+output "Instance AMI ID:" {
+  value = "${aws_instance.simple_instance.ami}"
+}
+
+output "Instance type" {
+  value = "${aws_instance.simple_instance.instance_type}"
+}
+
