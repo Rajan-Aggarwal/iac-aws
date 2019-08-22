@@ -1,6 +1,6 @@
 variable "region" {
   default = "ap-south-1"
-  description = "The region of the data-center"
+  description = "The region/location of the data-center"
 }
 
 variable "profile" {
@@ -17,5 +17,3 @@ variable "instance_type" {
   default = "t2.micro" # free-tier 
   description = "The type of instance for the deployment"
 }
-
-
