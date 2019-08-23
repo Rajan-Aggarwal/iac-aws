@@ -12,33 +12,16 @@ data "aws_ami" "ubuntu" {
   }
 
   filter = {
-    name = "virtualization_type"
+    name = "virtualization-type"
     values = ["hvm"]
   }
-}
 
-data "aws_ami" "aws_linux_2" {
-  most_recent = true
-
-  filter = {
-    name = "owner-alias"
-    values = ["amazon"]
-  }
-
-  filter = {
-    name = "name"
-    values = ["amzn2-ami-hvm*"]
-  }
-
-  filter = {
-    name = "virtualization_type"
-    values = ["hvm"]
-  }
+  owners = ["099720109477"] # aws canonical name
 }
 
 resource "aws_instance" "simple_instance" {
   # ubuntu 18.04 t2.micro free tier
-  ami = "${ var.environment == "dev" ? data.aws_ami.aws_linux_2 : data.aws_ami.ubuntu.id }"
+  ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "${var.instance_type}"
   count = "${var.count}"
   associate_public_ip_address = "${var.ip_address}"
@@ -50,7 +33,7 @@ resource "aws_instance" "simple_instance" {
   tags {
     Name = "simple_instance + ${count.index}"
     Region = "${var.region}"
-    Count = "${var.count.index}"
+    Count = "${count.index}"
     Timestamp = "${timestamp()}"
     Project = "${var.project_name}"
     Owner = "${var.owner}"
