@@ -1,3 +1,7 @@
+###
+# EC2 instance and its ip address
+###
+
 resource "aws_instance" "rails-instance" {
   # Ubuntu 18.04 AMI; t2.micro (free-tier)
   ami = "${data.aws_ami.ubuntu-1804.id}"
@@ -32,3 +36,10 @@ resource "aws_instance" "rails-instance" {
       Env = "Practice"
   }
 }
+
+# Elastic ip address
+resource "aws_eip" "rails-server-ip" {
+  instance = "${aws_instance.rails-instance.id}"
+  vpc = true
+}
+
