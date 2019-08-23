@@ -28,6 +28,6 @@ variable "instances" {
     "server1",
     "server2",
   ]
-  description = "List of servers running"
+  description = "List of servers you want to boot"
 }
 
