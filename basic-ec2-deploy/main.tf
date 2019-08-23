@@ -10,7 +10,7 @@ resource "aws_instance" "simple_instance" {
   count = "${length(var.instances)}"
 
   tags {
-    Name = "simple_instance"
+    Name = "simple_instance + ${count.index}"
     Owner = "raaggarw"
     Env = "Practice"
   } 
