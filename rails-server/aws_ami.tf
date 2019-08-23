@@ -3,12 +3,12 @@
 # because IDs may change
 ###
 
-data "aws_ami" "ubuntu-18.04" {
+data "aws_ami" "ubuntu-1804" {
   most_recent = true
 
   filter = {
       name = "name" # filter by name
-      values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-18.04-amd64-server-*"]
+      values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
   }
 
   filter = {
@@ -16,5 +16,5 @@ data "aws_ami" "ubuntu-18.04" {
       values = ["hvm"]
   }
 
-  owner = ["099720109477"] # aws canonical name
+  owners = ["099720109477"] # aws canonical name
 }
