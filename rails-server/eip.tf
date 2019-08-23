@@ -5,4 +5,5 @@
 
 resource "aws_eip" "rails-server-ip" {
   instance = "${aws_instance.rails-instance.id}"
+  vpc = true
 }
