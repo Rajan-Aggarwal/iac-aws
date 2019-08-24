@@ -1,6 +1,6 @@
-###
-# Authentication for the cloud provider
-###
+/**
+* Authentication for the cloud provider
+**/
 
 provider "aws" {
   profile = "${var.profile}"

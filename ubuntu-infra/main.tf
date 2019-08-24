@@ -1,8 +1,7 @@
-###
-# A very simple terraform script to deploy 
-# multiple ec2 instances on aws
-###
-
+/**
+* A terraform script to build a robust infrastructure
+* around a single ec2 instances
+**/
 
 # discover an appropriate AWS AMI for an ubuntu server
 
@@ -22,11 +21,45 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # aws canonical name
 }
 
-# random availability zone
+# random availability zone generator
 
 resource "random_shuffle" "random_az" {
   input = ["a", "b", "c"]
   result_count = 1
+}
+
+# security groups
+
+resource "aws_security_group" "allow_ssh" {
+  name = "allow_ssh"
+  description = "Allow all SSH inbound"
+
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # allow all for now
+  }
+
+  tags {
+    Name = "allow_ssh"
+  }
+}
+
+resource "aws_security_group" "allow_outbound" {
+  name = "allow_outbound"
+  description = "All all outbound connections"
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_outbound"
+  }
 }
 
 
@@ -38,14 +71,24 @@ resource "aws_instance" "ubuntu" {
   instance_type = "${var.instance_type}"
   count = "${var.count}"
   associate_public_ip_address = "${var.ip_address}"
-  availability_zone = "${random_shuffle.random_az.result}" 
+  availability_zone = "${var.region}${random_shuffle.random_az.result[0]}" 
+
+  depends_on = [
+    "aws_security_group.allow_outbound",
+    "aws_security_group.allow_ssh"
+  ]
+
+  security_groups = [
+    "${aws_security_group.allow_outbound.name}",
+    "${aws_security_group.allow_ssh.name}"
+  ]
 
   root_block_device {
     volume_size = "${var.volume_size}"
   }
 
   tags {
-    Name = "ubuntu + ${count.index}"
+    Name = "ubuntu${count.index}"
     Region = "${var.region}"
     Count = "${count.index}"
     Timestamp = "${timestamp()}"
@@ -59,33 +102,6 @@ resource "aws_instance" "ubuntu" {
 
 resource "aws_eip" "ubuntu_ip" {
   instance = "${aws_instance.ubuntu.id}"
+  depends_on = ["aws_instance.ubuntu"]
   vpc = true
-}
-
-# output on completion
-# output all the running instances' AMI ID
-# and instance types
-
-output "Instance name" {
-  value = "${aws_instance.ubuntu.*.tags.Name}"
-}
-
-output "Instance AMI ID:" {
-  value = "${aws_instance.ubuntu.*.ami}"
-}
-
-output "Instance type" {
-  value = "${aws_instance.ubuntu.*.instance_type}"
-}
-
-output "Instance region" {
-  value = "${aws_instance.ubuntu.tags.Region}"
-}
-
-output "Instance az" {
-  value = "${aws_instance.ubuntu.*.availability_zone}"
-}
-
-output "Ip address" {
-  value = "${aws_eip.ubuntu_ip.public_ip}"
 }
