@@ -52,13 +52,12 @@ resource "aws_eip" "ubuntu_ip" {
   vpc = true
 }
 
-
 # output on completion
 # output all the running instances' AMI ID
 # and instance types
 
 output "Instance name" {
-  value = "${aws_instance.ubuntu.*.Name}"
+  value = "${aws_instance.ubuntu.*.tags.Name}"
 }
 
 output "Instance AMI ID:" {
