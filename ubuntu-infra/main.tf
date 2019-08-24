@@ -5,6 +5,7 @@
 
 
 # discover an appropriate AWS AMI for an ubuntu server
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -21,6 +22,14 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # aws canonical name
 }
 
+# random availability zone
+
+resource "random_shuffle" "random_az" {
+  input = ["a", "b", "c"]
+  result_count = 1
+}
+
+
 # create the instance
 
 resource "aws_instance" "ubuntu" {
@@ -29,6 +38,7 @@ resource "aws_instance" "ubuntu" {
   instance_type = "${var.instance_type}"
   count = "${var.count}"
   associate_public_ip_address = "${var.ip_address}"
+  availability_zone = "${random_shuffle.random_az.result}" 
 
   root_block_device {
     volume_size = "${var.volume_size}"
@@ -66,4 +76,16 @@ output "Instance AMI ID:" {
 
 output "Instance type" {
   value = "${aws_instance.ubuntu.*.instance_type}"
+}
+
+output "Instance region" {
+  value = "${aws_instance.ubuntu.tags.Region}"
+}
+
+output "Instance az" {
+  value = "${aws_instance.ubuntu.*.availability_zone}"
+}
+
+output "Ip address" {
+  value = "${aws_eip.ubuntu_ip.public_ip}"
 }
