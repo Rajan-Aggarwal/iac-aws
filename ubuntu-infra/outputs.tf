@@ -31,3 +31,7 @@ output "Ip address" {
 output "Security group" {
   value = "${aws_instance.ubuntu.*.security_groups}"
 }
+
+output "EBS id and name" {
+  value = "${aws_ebs_volume.ubuntu_volume.id}-${aws_ebs_volume.ubuntu_volume.tags.name}"
+}

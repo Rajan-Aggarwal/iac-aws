@@ -1,5 +1,5 @@
 /**
-* home of all variables
+* Home of all variables
 *
 * One can change these variables at runtime 
 * using -var flag
