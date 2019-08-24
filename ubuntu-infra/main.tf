@@ -3,6 +3,8 @@
 # multiple ec2 instances on aws
 ###
 
+
+# discover an appropriate AWS AMI for an ubuntu server
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -18,6 +20,8 @@ data "aws_ami" "ubuntu" {
 
   owners = ["099720109477"] # aws canonical name
 }
+
+# create the instance
 
 resource "aws_instance" "ubuntu" {
   # ubuntu 18.04 t2.micro free tier
@@ -41,6 +45,8 @@ resource "aws_instance" "ubuntu" {
   } 
 }
 
+# elastic ip address
+
 resource "aws_eip" "ubuntu_ip" {
   instance = "${aws_instance.ubuntu.id}"
   vpc = true
@@ -50,6 +56,11 @@ resource "aws_eip" "ubuntu_ip" {
 # output on completion
 # output all the running instances' AMI ID
 # and instance types
+
+output "Instance name" {
+  value = "${aws_instance.ubuntu.*.Name}"
+}
+
 output "Instance AMI ID:" {
   value = "${aws_instance.ubuntu.*.ami}"
 }
