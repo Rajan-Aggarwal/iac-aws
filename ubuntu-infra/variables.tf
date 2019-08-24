@@ -1,6 +1,11 @@
-###
-# home of all variables
-###
+/**
+* home of all variables
+*
+* One can change these variables at runtime 
+* using -var flag
+* or using -varfile tag and making a variable file
+* of the form variables.vtf
+**/
 
 variable "owner" {
   default = "raaggarw"
@@ -40,18 +45,23 @@ variable count {
 }
 
 variable "volume_size" {
-  default = "35"
-}
-
-
-variable "ip_address" {
-  default = "true"
+  default = "10"
+  description = "Volume of the ebs instance (in GB)"
 }
 
 variable "project_name" {
-  default = "ec2_deployment"
+  default = "Ubuntu infrastructure builder"
+  description = "Name of the project we are running the scripts for"
 }
 
 variable "environment" {
   default = "production"
+  description = "We assume that this is a production environment"
 }
+
+variable "availability_zone_list" {
+  type = "list"
+  default = ["a", "b"]
+  description = "Different regions have different number of AZs"
+}
+

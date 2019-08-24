@@ -24,7 +24,7 @@ data "aws_ami" "ubuntu" {
 # random availability zone generator
 
 resource "random_shuffle" "random_az" {
-  input = ["a", "b", "c"]
+  input = ["${var.availability_zone_list}"]
   result_count = 1
 }
 
@@ -70,7 +70,6 @@ resource "aws_instance" "ubuntu" {
   ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "${var.instance_type}"
   count = "${var.count}"
-  associate_public_ip_address = "${var.ip_address}"
   availability_zone = "${var.region}${random_shuffle.random_az.result[0]}" 
 
   depends_on = [
@@ -105,3 +104,26 @@ resource "aws_eip" "ubuntu_ip" {
   depends_on = ["aws_instance.ubuntu"]
   vpc = true
 }
+
+# volume for the instance
+
+resource "aws_ebs_volume" "ubuntu_volume" {
+  availability_zone = "${aws_instance.ubuntu.availability_zone}"
+  size = 10
+
+  tags {
+    Name = "ebs-${aws_instance.ubuntu.tags.Name}"
+  }
+
+  depends_on = ["aws_instance.ubuntu"]
+}
+
+# attach the volume to the instance
+
+resource "aws_volume_attachment" "attach_ebs" {
+  device_name = "/dev/sdh"
+  volume_id = "${aws_ebs_volume.ubuntu_volume.id}"
+  instance_id = "${aws_instance.ubuntu.id}"
+}
+
+
