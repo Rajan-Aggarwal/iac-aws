@@ -125,5 +125,3 @@ resource "aws_volume_attachment" "attach_ebs" {
   volume_id = "${aws_ebs_volume.ubuntu_volume.id}"
   instance_id = "${aws_instance.ubuntu.id}"
 }
-
-
