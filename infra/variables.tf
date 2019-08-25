@@ -12,6 +12,19 @@ variable "owner" {
   description = "Name of the owner of the aws account"
 }
 
+variable "ami-name-query" {
+  type = "list"
+  default = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+  description = "Query for name-based filter to find the required ami"
+}
+
+variable "ami-vtype-query" {
+  type = "list"
+  default = ["hvm"]
+  description = "Query for virtualization type based filter to find the required ami"
+}
+
+
 
 variable "region" {
   default = "ap-south-1"
@@ -24,7 +37,7 @@ variable "profile" {
 }
 
 variable "instance_name" {
-  default = "ec2"
+  default = "ubuntu"
   description = "The name of the ec2 instance"
 }
 
