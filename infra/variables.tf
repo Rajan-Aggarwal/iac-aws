@@ -39,7 +39,7 @@ variable "instance_name" {
 }
 
 variable "ami_id" {
-  default = "ami-009110a2bf8d7dd0a" # ubuntu 18.04 for ap-south-1
+  default = "None" # ubuntu 18.04 for ap-south-1
   description = "The image id for the ec2 instance image"
 }
 
@@ -59,12 +59,12 @@ variable "volume_size" {
 }
 
 variable "project_name" {
-  default = "Ubuntu infrastructure builder"
+  default = "AWS infrastructure"
   description = "Name of the project we are running the scripts for"
 }
 
 variable "environment" {
-  default = "production"
+  default = "dev"
   description = "We assume that this is a production environment"
 }
 

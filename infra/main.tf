@@ -73,7 +73,11 @@ resource "aws_security_group" "allow_outbound" {
 # create the instance
 
 resource "aws_instance" "server" {
-  ami = "${data.aws_ami.server_ami.id}"
+
+  # if the user provides ami_id as a var, use it
+  # otherwise use the default query (Ubuntu 18.04)
+  ami = "${var.ami_id == "None" ? data.aws_ami.server_ami.id : var.ami_id}"
+
   instance_type = "${var.instance_type}"
   count = "${var.count}"
   availability_zone = "${var.region}${random_shuffle.random_az.result[0]}" 
