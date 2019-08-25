@@ -12,14 +12,20 @@
 
 export PATH=$PATH:/opt
 
-# input parsing assertions
+# usage function
 
-if [[ -z "$1" ]]; then
+usage() {
   echo ""
   echo "Invalid syntax"
   echo "Usage: ./plan.sh <PATH>"
   echo ""
   exit
+}
+
+# input parsing assertions
+
+if [[ -z "$1" ]]; then
+  usage
 fi
 
 # initialize terraform 

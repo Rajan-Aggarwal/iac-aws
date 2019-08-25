@@ -73,7 +73,6 @@ resource "aws_security_group" "allow_outbound" {
 # create the instance
 
 resource "aws_instance" "server" {
-  # ubuntu 18.04 t2.micro free tier
   ami = "${data.aws_ami.server_ami.id}"
   instance_type = "${var.instance_type}"
   count = "${var.count}"

@@ -2,9 +2,8 @@
 * Home of all variables
 *
 * One can change these variables at runtime 
-* using -var flag
-* or using -varfile tag and making a variable file
-* of the form variables.vtf
+* using -var-file tag and making a variable file
+* of the form variables.tfvars
 **/
 
 variable "owner" {
@@ -50,7 +49,7 @@ variable "instance_type" {
 }
 
 variable count {
-  default = "2"
+  default = "1"
   description = "Number of servers for deployment"
 }
 
