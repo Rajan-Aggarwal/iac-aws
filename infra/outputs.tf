@@ -3,34 +3,34 @@
 **/
 
 output "Instance name" {
-  value = "${aws_instance.ubuntu.*.tags.Name}"
+  value = "${aws_instance.server.*.tags.Name}"
 }
 
 output "Instance AMI ID:" {
-  value = "${aws_instance.ubuntu.*.ami}"
+  value = "${aws_instance.server.*.ami}"
 }
 
 output "Instance type" {
-  value = "${aws_instance.ubuntu.*.instance_type}"
+  value = "${aws_instance.server.*.instance_type}"
 }
 
 output "Instance az" {
-  value = "${aws_instance.ubuntu.*.availability_zone}"
+  value = "${aws_instance.server.*.availability_zone}"
 }
 
 output "Ip address" {
-  value = "${aws_eip.ubuntu_ip.*.public_ip}"
+  value = "${aws_eip.server_ip.*.public_ip}"
 }
 
 output "Security group" {
-  value = "${aws_instance.ubuntu.*.security_groups}"
+  value = "${aws_instance.server.*.security_groups}"
 }
 
 output "EBS id" {
-  value = "${aws_ebs_volume.ubuntu_volume.*.id}"
+  value = "${aws_ebs_volume.server_volume.*.id}"
 }
 
 output "EBS name" {
-  value = "${aws_ebs_volume.ubuntu_volume.*.tags.Name}"
+  value = "${aws_ebs_volume.server_volume.*.tags.Name}"
 }
 

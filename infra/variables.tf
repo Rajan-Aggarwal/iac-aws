@@ -24,8 +24,6 @@ variable "ami-vtype-query" {
   description = "Query for virtualization type based filter to find the required ami"
 }
 
-
-
 variable "region" {
   default = "ap-south-1"
   description = "The region/location of the data-center"
@@ -40,7 +38,6 @@ variable "instance_name" {
   default = "ubuntu"
   description = "The name of the ec2 instance"
 }
-
 
 variable "ami_id" {
   default = "ami-009110a2bf8d7dd0a" # ubuntu 18.04 for ap-south-1
