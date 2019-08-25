@@ -75,13 +75,6 @@ variable "availability_zone_list" {
 }
 
 variable "ssh_public_key_file" {
-  default = "/home/rajan/aws-keys/aws_key"
+  default = "/home/rajan/aws_ec2_key.pub"
   description = "File where the ssh public key is stored"
 }
-
-variable "ssh_private_key_file" {
-  default = "/home/rajan/aws-keys/aws_key.pub"
-  description = "File where the ssh private key is stored"
-}
-
-

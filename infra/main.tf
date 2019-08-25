@@ -64,10 +64,10 @@ resource "aws_security_group" "allow_outbound" {
 
 # create the ssh key-pair
 
-# resource "aws_key_pair" "aws_key_pair_infra" {
-#   key_name = "aws_key"
-#   public_key = "${file("${var.ssh_public_key_file}")}"
-# }
+resource "aws_key_pair" "aws_key_pair_infra" {
+  key_name = "aws_key"
+  public_key = "${file("${var.ssh_public_key_file}")}"
+}
 
 
 # create the instance
@@ -82,7 +82,7 @@ resource "aws_instance" "server" {
   count = "${var.count}"
   availability_zone = "${var.region}${random_shuffle.random_az.result[0]}" 
 
-  #key_name = "${aws_key_pair.aws_key_pair_infra.key_name}"
+  key_name = "${aws_key_pair.aws_key_pair_infra.key_name}"
 
   depends_on = [
     "aws_security_group.allow_outbound",
