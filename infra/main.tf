@@ -62,6 +62,13 @@ resource "aws_security_group" "allow_outbound" {
   }
 }
 
+# create the ssh key-pair
+
+resource "aws_key_pair" "aws_key_pair_infra" {
+  key_name = "aws_key"
+  public_key = "${file("${var.ssh_public_key_file}")}"
+}
+
 
 # create the instance
 
@@ -71,6 +78,8 @@ resource "aws_instance" "ubuntu" {
   instance_type = "${var.instance_type}"
   count = "${var.count}"
   availability_zone = "${var.region}${random_shuffle.random_az.result[0]}" 
+
+  key_name = "${aws_key_pair.aws_key_pair_infra.key_name}"
 
   depends_on = [
     "aws_security_group.allow_outbound",
@@ -124,4 +133,9 @@ resource "aws_volume_attachment" "attach_ebs" {
   device_name = "/dev/sdh"
   volume_id = "${aws_ebs_volume.ubuntu_volume.id}"
   instance_id = "${aws_instance.ubuntu.id}"
+
+  depends_on = [
+    "aws_instance.ubuntu", 
+    "aws_ebs_volume.ubuntu_volume"
+  ]
 }

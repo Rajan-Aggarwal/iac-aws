@@ -65,3 +65,14 @@ variable "availability_zone_list" {
   description = "Different regions have different number of AZs"
 }
 
+variable "ssh_public_key_file" {
+  default = "/home/rajan/aws-keys/aws_key"
+  description = "File where the ssh public key is stored"
+}
+
+variable "ssh_private_key_file" {
+  default = "/home/rajan/aws-keys/aws_key.pub"
+  description = "File where the ssh private key is stored"
+}
+
+

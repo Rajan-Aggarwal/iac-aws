@@ -49,7 +49,7 @@ resource "aws_instance" "simple-instance" {
   # Ubuntu 18.04 AMI; t2.micro (free-tier)
   ami = "${data.aws_ami.ubuntu-1804.id}"
   instance_type = "${var.instance_type}"
-  key_name = "${aws_key_pair.ruby_key.key_name}"
+  key_name = "${aws_key_pair.aws_ec2_key.key_name}"
 
   security_groups = [
     "${aws_security_group.allow_ssh.name}",
