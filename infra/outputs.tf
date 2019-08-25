@@ -33,5 +33,5 @@ output "Security group" {
 }
 
 output "EBS id and name" {
-  value = "${aws_ebs_volume.ubuntu_volume.id}-${aws_ebs_volume.ubuntu_volume.tags.name}"
+  value = "${aws_ebs_volume.ubuntu_volume.id}-${aws_ebs_volume.ubuntu_volume.tags.Name}"
 }
