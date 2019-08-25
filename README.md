@@ -8,4 +8,4 @@ complete infrastructure around an instance.
 
 # Usage
 
-./apply.sh <folder-name-of-the-infra> -varfile "<variables-filepath>"
+./apply.sh folder-name-of-the-infra -varfile "variables-filepath"
