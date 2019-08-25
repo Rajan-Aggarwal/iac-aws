@@ -40,7 +40,7 @@ variable "instance_type" {
 }
 
 variable count {
-  default = "1"
+  default = "2"
   description = "Number of servers for deployment"
 }
 

@@ -64,10 +64,10 @@ resource "aws_security_group" "allow_outbound" {
 
 # create the ssh key-pair
 
-resource "aws_key_pair" "aws_key_pair_infra" {
-  key_name = "aws_key"
-  public_key = "${file("${var.ssh_public_key_file}")}"
-}
+# resource "aws_key_pair" "aws_key_pair_infra" {
+#   key_name = "aws_key"
+#   public_key = "${file("${var.ssh_public_key_file}")}"
+# }
 
 
 # create the instance
@@ -79,7 +79,7 @@ resource "aws_instance" "ubuntu" {
   count = "${var.count}"
   availability_zone = "${var.region}${random_shuffle.random_az.result[0]}" 
 
-  key_name = "${aws_key_pair.aws_key_pair_infra.key_name}"
+  #key_name = "${aws_key_pair.aws_key_pair_infra.key_name}"
 
   depends_on = [
     "aws_security_group.allow_outbound",
@@ -91,9 +91,9 @@ resource "aws_instance" "ubuntu" {
     "${aws_security_group.allow_ssh.name}"
   ]
 
-  root_block_device {
-    volume_size = "${var.volume_size}"
-  }
+  # root_block_device {
+  #   volume_size = "${var.volume_size}"
+  # }
 
   tags {
     Name = "ubuntu${count.index}"
@@ -109,7 +109,8 @@ resource "aws_instance" "ubuntu" {
 # elastic ip address
 
 resource "aws_eip" "ubuntu_ip" {
-  instance = "${aws_instance.ubuntu.id}"
+  count = "${aws_instance.ubuntu.count}"
+  instance = "${aws_instance.ubuntu.*.id[count.index]}"
   depends_on = ["aws_instance.ubuntu"]
   vpc = true
 }
@@ -117,11 +118,12 @@ resource "aws_eip" "ubuntu_ip" {
 # volume for the instance
 
 resource "aws_ebs_volume" "ubuntu_volume" {
-  availability_zone = "${aws_instance.ubuntu.availability_zone}"
+  count = "${aws_instance.ubuntu.count}"
+  availability_zone = "${aws_instance.ubuntu.*.availability_zone[count.index]}"
   size = 10
 
   tags {
-    Name = "ebs-${aws_instance.ubuntu.tags.Name}"
+    Name = "ebs-${aws_instance.ubuntu.*.tags.Name[count.index]}"
   }
 
   depends_on = ["aws_instance.ubuntu"]
@@ -130,9 +132,10 @@ resource "aws_ebs_volume" "ubuntu_volume" {
 # attach the volume to the instance
 
 resource "aws_volume_attachment" "attach_ebs" {
+  count = "${aws_ebs_volume.ubuntu_volume.count}"
   device_name = "/dev/sdh"
-  volume_id = "${aws_ebs_volume.ubuntu_volume.id}"
-  instance_id = "${aws_instance.ubuntu.id}"
+  volume_id = "${aws_ebs_volume.ubuntu_volume.*.id[count.index]}"
+  instance_id = "${aws_instance.ubuntu.*.id[count.index]}"
 
   depends_on = [
     "aws_instance.ubuntu", 
